@@ -11,6 +11,17 @@ from modules.pose import Pose, track_poses
 from val import normalize, pad_width
 
 
+PERSON_COLORS = [
+    (0, 255, 0), (0, 200, 255), (255, 200, 0), (255, 100, 0),
+    (255, 0, 0), (255, 0, 128), (180, 0, 255), (0, 128, 255)
+]
+
+
+def get_person_color(pose):
+    pose_key = pose.id if pose.id is not None else int(pose.confidence * 1000)
+    return PERSON_COLORS[pose_key % len(PERSON_COLORS)]
+
+
 class ImageReader(object):
     def __init__(self, file_names):
         self.file_names = file_names
@@ -87,7 +98,8 @@ def run_demo(net, image_provider, height_size, cpu, track, smooth):
     upsample_ratio = 4
     num_keypoints = Pose.num_kpts
     previous_poses = []
-    delay = 1
+    # For image input, wait for a key press so the window does not close immediately.
+    delay = 0 if isinstance(image_provider, ImageReader) else 1
     for img in image_provider:
         orig_img = img.copy()
         heatmaps, pafs, scale, pad = infer_fast(net, img, height_size, stride, upsample_ratio, cpu)
@@ -118,13 +130,14 @@ def run_demo(net, image_provider, height_size, cpu, track, smooth):
             previous_poses = current_poses
         for pose in current_poses:
             pose.draw(img)
-        img = cv2.addWeighted(orig_img, 0.6, img, 0.4, 0)
+        img = cv2.addWeighted(orig_img, 0.3, img, 0.7, 0)
         for pose in current_poses:
+            person_color = get_person_color(pose)
             cv2.rectangle(img, (pose.bbox[0], pose.bbox[1]),
-                          (pose.bbox[0] + pose.bbox[2], pose.bbox[1] + pose.bbox[3]), (0, 255, 0))
+                                                    (pose.bbox[0] + pose.bbox[2], pose.bbox[1] + pose.bbox[3]), person_color, 3)
             if track:
                 cv2.putText(img, 'id: {}'.format(pose.id), (pose.bbox[0], pose.bbox[1] - 16),
-                            cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 255))
+                                                        cv2.FONT_HERSHEY_COMPLEX, 0.8, person_color, 2)
         cv2.imshow('Lightweight Human Pose Estimation Python Demo', img)
         key = cv2.waitKey(delay)
         if key == 27:  # esc

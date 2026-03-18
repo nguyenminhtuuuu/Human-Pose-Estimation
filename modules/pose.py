@@ -17,6 +17,18 @@ class Pose:
     vars = (sigmas * 2) ** 2
     last_id = -1
     color = [0, 224, 255]
+    # Distinct BGR colors for keypoints and limbs to improve readability.
+    kpt_colors = [
+        (0, 0, 255), (0, 128, 255), (0, 255, 255), (0, 255, 0), (255, 255, 0), (255, 128, 0),
+        (255, 0, 0), (255, 0, 128), (255, 0, 255), (128, 0, 255), (64, 64, 255), (64, 255, 64),
+        (255, 64, 64), (64, 255, 255), (255, 255, 64), (128, 255, 0), (0, 255, 128), (255, 128, 255)
+    ]
+    limb_colors = [
+        (0, 0, 255), (0, 64, 255), (0, 128, 255), (0, 192, 255), (0, 255, 255), (0, 255, 192),
+        (0, 255, 128), (0, 255, 64), (0, 255, 0), (64, 255, 0), (128, 255, 0), (192, 255, 0),
+        (255, 255, 0), (255, 192, 0), (255, 128, 0), (255, 64, 0), (255, 0, 0), (255, 0, 128),
+        (255, 0, 255)
+    ]
 
     def __init__(self, keypoints, confidence):
         super().__init__()
@@ -52,14 +64,15 @@ class Pose:
             global_kpt_a_id = self.keypoints[kpt_a_id, 0]
             if global_kpt_a_id != -1:
                 x_a, y_a = self.keypoints[kpt_a_id]
-                cv2.circle(img, (int(x_a), int(y_a)), 3, Pose.color, -1)
+                cv2.circle(img, (int(x_a), int(y_a)), 5, Pose.kpt_colors[kpt_a_id], -1)
             kpt_b_id = BODY_PARTS_KPT_IDS[part_id][1]
             global_kpt_b_id = self.keypoints[kpt_b_id, 0]
             if global_kpt_b_id != -1:
                 x_b, y_b = self.keypoints[kpt_b_id]
-                cv2.circle(img, (int(x_b), int(y_b)), 3, Pose.color, -1)
+                cv2.circle(img, (int(x_b), int(y_b)), 5, Pose.kpt_colors[kpt_b_id], -1)
             if global_kpt_a_id != -1 and global_kpt_b_id != -1:
-                cv2.line(img, (int(x_a), int(y_a)), (int(x_b), int(y_b)), Pose.color, 2)
+                limb_color = Pose.limb_colors[part_id % len(Pose.limb_colors)]
+                cv2.line(img, (int(x_a), int(y_a)), (int(x_b), int(y_b)), limb_color, 4)
 
 
 def get_similarity(a, b, threshold=0.5):
