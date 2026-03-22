@@ -259,13 +259,6 @@ Output: [heatmap, PAF, ...] từ các stage khác nhau
 
 ---
 
-## 5. THỰC HÀNH TRƯỚC PHÚT VẤN
-
-### Mỗi thành viên chuẩn bị:
-1. **Lý thuyết:** Hiểu sâu file của mình.
-2. **Code simulation:** Chạy 1 file ví dụ, trace code (F10 step, watch variable).
-3. **Trả lời quick tiếng Anh:** Vì thầy có thể hỏi bằng Anh.
-4. **Demo live:** Chuẩn bị 2-3 video/ảnh để demo ngay.
 
 ### Demo script:
 ```bash
@@ -296,36 +289,3 @@ python demo.py --checkpoint-path models\checkpoint_iter_370000.pth \
 - P2.2 (Người 3): Input pre/post-processing (2 phút).
 - P2.3 (Người 4): Keypoint & Skeleton (2 phút).
 - P2.4 (Người 5): Visualization & Tracking (2 phút).
-
-**Phần 3: Demo (Nhóm Trưởng + Tất Cả - 3 phút)**
-- Chạy demo ảnh, video, webcam.
-- Giải thích output realtime.
-
-**Phần 4: Q&A - Đáp Lời Thầy (Tất Cả - 4 phút)**
-- Chuẩn bị câu trả lời trước.
-
----
-
-## 7. THỨ TỰ ĐỌC FILE HỢP LÝ
-
-Nếu chưa biết gì, đọc theo thứ tự này:
-
-1. Đọc README.md (overview).
-2. Đọc demo.py (flow chính).
-3. Đọc from_mobilenet.py (model).
-4. Đọc modules/pose.py (visualization).
-5. Đọc modules/keypoints.py (processing).
-6. Đọc train.py (optional, hiểu training strategy).
-
----
-
-## 8. GHI CHÚ QUAN TRỌNG
-
-- **Không train:** Project này chỉ chạy inference (dùng model đã train sẵn).
-- **No augmentation at inference:** Augmentation chỉ dùng lúc training.
-- **Upstream attribution:** Giữ link tác giả gốc (Daniil Osokin, Apache 2.0 License).
-- **Git setup:** Remote upstream = tác giả, origin = team repo mới.
-
----
-
-Chúc nhóm thuyết trình tốt! 🎉
