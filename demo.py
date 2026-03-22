@@ -133,8 +133,6 @@ def run_demo(net, image_provider, height_size, cpu, track, smooth):
         img = cv2.addWeighted(orig_img, 0.3, img, 0.7, 0)
         for pose in current_poses:
             person_color = get_person_color(pose)
-            cv2.rectangle(img, (pose.bbox[0], pose.bbox[1]),
-                                                    (pose.bbox[0] + pose.bbox[2], pose.bbox[1] + pose.bbox[3]), person_color, 3)
             if track:
                 cv2.putText(img, 'id: {}'.format(pose.id), (pose.bbox[0], pose.bbox[1] - 16),
                                                         cv2.FONT_HERSHEY_COMPLEX, 0.8, person_color, 2)
